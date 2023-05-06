@@ -1,1 +1,10 @@
-Pillow
+certifi==2022.12.7
+charset-normalizer==3.1.0
+idna==3.4
+numpy==1.24.2
+Pillow==9.4.0
+pybind11==2.10.3
+requests==2.30.0
+skia-python==87.5
+tinify==1.6.0
+urllib3==2.0.2
