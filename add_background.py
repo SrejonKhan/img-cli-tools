@@ -3,8 +3,9 @@ import os
 from PIL import Image, ImageOps, ImageDraw
 import colorsys
 
+
 # Calculate the average color of an image
-def average_color(image):    
+def average_color(image):
     width, height = image.size
     pixels = image.load()
     r, g, b = 0, 0, 0
@@ -18,12 +19,12 @@ def average_color(image):
             g += g_
             b += b_
             count += 1
-    return (r//count, g//count, b//count)
+    return (r // count, g // count, b // count)
 
 
 # Get the complement color of a color
 def complement_color(color):
-    return (255-color[0], 255-color[1], 255-color[2])
+    return (255 - color[0], 255 - color[1], 255 - color[2])
 
 
 # Get the triadic color of a color
@@ -33,18 +34,18 @@ def triadic_color(color):
     max_value = max(r, g, b)
     min_value = min(r, g, b)
     if max_value == r:
-        return (min_value, max_value, (min_value + max_value)//2)
+        return (min_value, max_value, (min_value + max_value) // 2)
     elif max_value == g:
-        return ((min_value + max_value)//2, min_value, max_value)
+        return ((min_value + max_value) // 2, min_value, max_value)
     else:
-        return (max_value, (min_value + max_value)//2, min_value)
+        return (max_value, (min_value + max_value) // 2, min_value)
 
 
 # Get the tetradic color of a color
 def tetradic_color(color):
-    h, s, v = colorsys.rgb_to_hsv(color[0]/255, color[1]/255, color[2]/255)
+    h, s, v = colorsys.rgb_to_hsv(color[0] / 255, color[1] / 255, color[2] / 255)
     h = (h + 0.25) % 1
-    return tuple(map(lambda x: int(x*255), colorsys.hsv_to_rgb(h, s, v)))
+    return tuple(map(lambda x: int(x * 255), colorsys.hsv_to_rgb(h, s, v)))
 
 
 # Get the analogous color of a color
@@ -56,7 +57,9 @@ def analogous_color(color):
     return (r, g, b)
 
 
-def add_background_with_margin(image_path, output_path, color_scheme, margin=0, bg_color=None):
+def add_background_with_margin(
+    image_path, output_path, color_scheme, margin=0, bg_color=None
+):
     # Open the image
     img = Image.open(image_path)
 
@@ -76,18 +79,20 @@ def add_background_with_margin(image_path, output_path, color_scheme, margin=0, 
     bg = Image.new("RGBA", img.size, (bg_color[0], bg_color[1], bg_color[2], 255))
 
     # Paste the original image on top of the background
-    bg.paste(img, mask=img.split()[3]) # 3 is the alpha channel
+    bg.paste(img, mask=img.split()[3])  # 3 is the alpha channel
 
     # Add a margin to the image if specified
     if margin > 0:
-        bg = ImageOps.expand(bg, border=margin, fill=(bg_color[0], bg_color[1], bg_color[2], 255))
+        bg = ImageOps.expand(
+            bg, border=margin, fill=(bg_color[0], bg_color[1], bg_color[2], 255)
+        )
 
     # Save the resulting image
     bg.save(output_path)
 
 
 def main():
-    usage = "Usage: python add_background.py <complement|triadic|tetradic|analogous> <directory_path> <margin> [bg_color]"
+    usage = "Usage: python add_background.py <complement|triadic|tetradic|analogous> <directory_path> [margin] [bg_color]"
 
     # Check if the directory path is provided
     if len(sys.argv) < 2:
@@ -123,7 +128,10 @@ def main():
         if filename.endswith(".png"):
             image_path = os.path.join(directory_path, filename)
             output_path = os.path.join(output_dir, filename)
-            add_background_with_margin(image_path, output_path, color_scheme, margin, bg_color)
+            add_background_with_margin(
+                image_path, output_path, color_scheme, margin, bg_color
+            )
+
 
 if __name__ == "__main__":
     main()
